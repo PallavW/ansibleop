@@ -1,2 +1,117 @@
----
-# tasks file for Database
+- name: Create database configmap
+  community.kubernetes.k8s:
+    definition:apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: mysql-config
+      data:
+        db-url: students
+
+- name: Create database secret
+  community.kubernetes.k8s:
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: mysql-credentials
+      type: Opaque
+      data:
+        username: cm9vdA==
+        password: TXlTUUwjMTY=
+
+- name: Create database service
+  community.kubernetes.k8s:
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: mysql-service
+        labels:
+          app: mysql-service
+      spec:
+        ports:
+        - port: 3306
+          targetPort: 3306
+          protocol: TCP
+        selector:
+          app: mysql-pod
+        clusterIP: None
+
+- name: Create database service
+  community.kubernetes.k8s:
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: mysql-deployment
+        labels:
+          app: mysql-deployment
+      spec:
+        selector:
+          matchLabels:
+            app: mysql-pod
+        strategy:
+          type: Recreate
+        template:
+          metadata:
+            labels:
+              app: mysql-pod
+          spec:
+            containers:
+            - image: mysql:5.6
+              name: mysql-container
+              ports:
+              - containerPort: 3306
+                name: mysql-port
+              env:
+              - name: MYSQL_ROOT_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: mysql-credentials
+                    key: username
+              - name: MYSQL_ROOT_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: mysql-credentials
+                    key: password
+              - name: MYSQL_DATABASE
+                valueFrom:
+                  configMapKeyRef:
+                    name: mysql-config
+                    key: db-url 
+            volumes:
+            - name: mysql-persistent-storage
+              persistentVolumeClaim:
+                claimName: mysql-pvc
+
+- name: Create database pv
+  community.kubernetes.k8s:
+    definition:apiVersion: v1
+      kind: PersistentVolume
+      metadata:
+        name: mysql-pv-volume
+        labels:
+          type: local
+      spec:
+        storageClassName: manual
+        capacity:
+          storage: 2Gi
+        accessModes:
+          - ReadWriteOnce
+        hostPath:
+          path: "/mnt/data"
+
+- name: Create database pvc
+  community.kubernetes.k8s:
+    definition:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: mysql-pv-claim
+      spec:
+        storageClassName: manual
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 2Gi
