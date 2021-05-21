@@ -1,0 +1,11 @@
+domain: studentapp.persistent.com
+layout: ansible.sdk.operatorframework.io/v1
+projectName: tutorial
+resources:
+- group: studentapps
+  kind: Frontend
+  version: v1alpha1
+- group: studentapps
+  kind: Database
+  version: v1alpha1
+version: 3-alpha

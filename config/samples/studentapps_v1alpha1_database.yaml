@@ -1,0 +1,6 @@
+apiVersion: studentapps.studentapp.persistent.com/v1alpha1
+kind: Database
+metadata:
+  name: database-sample
+spec:
+  foo: bar

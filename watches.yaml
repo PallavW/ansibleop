@@ -1,0 +1,11 @@
+---
+# Use the 'create api' subcommand to add watches to this file.
+- version: v1alpha1
+  group: studentapps.studentapp.persistent.com
+  kind: Frontend
+  role: frontend
+- version: v1alpha1
+  group: studentapps.studentapp.persistent.com
+  kind: Database
+  role: database
+# +kubebuilder:scaffold:watch

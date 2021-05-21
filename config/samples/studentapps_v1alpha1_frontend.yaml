@@ -1,0 +1,6 @@
+apiVersion: studentapps.studentapp.persistent.com/v1alpha1
+kind: Frontend
+metadata:
+  name: frontend-sample
+spec:
+  foo: bar
