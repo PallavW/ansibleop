@@ -1,0 +1,6 @@
+apiVersion: studentapp.persistent.com/v1alpha1
+kind: FrontEnd
+metadata:
+  name: myfrontend
+spec:
+  size: 1

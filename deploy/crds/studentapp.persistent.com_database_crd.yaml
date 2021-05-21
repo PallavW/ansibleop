@@ -1,17 +1,17 @@
-apiVersion: studentapp.persistent.com/v1alpha1
+apiVersion: studentapp.persistent.com/v1apha1
 kind: CustomResourceDefinition
 metadata:
-  name: frontends.studentapp.persistent.com
+  name: databases.studentapp.persistent.com
 spec:
   group: studentapp.persistent.com
   scope: Namespaced
   names:
-    kind: FrontEnd
-    listKind: FrontEndList
-    plural: frontends
-    singular: frontend
+    kind: Database
+    listKind: DatabaseList
+    plural: databases
+    singular: database
     shortNames:
-      - fe
+      - db
     subresources:
       status: {}
     validation:

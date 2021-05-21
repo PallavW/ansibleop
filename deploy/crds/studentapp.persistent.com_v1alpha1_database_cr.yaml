@@ -1,0 +1,8 @@
+apiVersion: studentapp.persistent.com/v1alpha1
+kind: Database
+metadata:
+  name: mydb
+spec:
+  size: 1
+  storage_class_name: 'managed-premium'
+  image: hub.docker.io/mysql:5.6
